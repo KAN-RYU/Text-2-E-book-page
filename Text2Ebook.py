@@ -1,5 +1,6 @@
 from PIL import ImageFont, Image, ImageDraw
 import sys
+import os
 
 #Global Variable
 font_Name = "KoPubWorld Dotum_Pro Medium.otf"
@@ -18,11 +19,13 @@ width_Limit = image_Size[0] - margin * 2
 height_Limit = image_Size[1] - margin * 2
 line_Space = font_Size // 2 #Change
 
+verbos_line = ""
+
 def insertString(origin, that, index):
     return origin[:index] + that + origin[index:]
 
-def makePages():
-    input_Text_File = open("./679화 수도로.txt", "r", encoding = 'utf-8')
+def makePages(fileName, folderName):
+    input_Text_File = open(text_Directory +  folderName + fileName, "r", encoding = 'utf-8')
     input_Text = input_Text_File.read()
     start = 0
     end = 1
@@ -30,11 +33,12 @@ def makePages():
     page_Queue = []
     page = Image.new("RGB", image_Size)
     page_draw = ImageDraw.Draw(page)
+    fileNameRaw = fileName[:-5]
 
     while(end < len(input_Text)):
+        sys.stdout.write(verbos_line + str(current_Page) + " Pages.")
+        sys.stdout.flush()
         while(True):
-            sys.stdout.write("\r" + str(current_Page) + " Pages.")
-            sys.stdout.flush()
             w, h = page_draw.textsize(input_Text[start:end], font = font_Object, spacing = line_Space)
             if h > height_Limit or end > len(input_Text):
                 #PageEnd
@@ -43,7 +47,7 @@ def makePages():
                 start = end + 1
                 end = start + 2
                 if not end > len(input_Text):
-                    while(input_Text[start] == '\n'):
+                    while(input_Text[start] == '\n' and end < len(input_Text)):
                         start += 1
                         end += 1
                 break
@@ -54,10 +58,7 @@ def makePages():
         current_Page += 1
         
     current_Page = 1
-    print()
     for i, pair in enumerate(page_Queue):
-        sys.stdout.write("\r" + str(i + 1) + "/" + str(len(page_Queue)))
-        sys.stdout.flush()
         page_draw.rectangle([(0,0), image_Size], fill = page_Color)
         page_draw.text((margin, margin), 
                             text = input_Text[pair[0]:pair[1]], 
@@ -65,10 +66,32 @@ def makePages():
                             spacing = line_Space, 
                             fill = font_Color, 
                             align = "left")
-        page.save(result_Directory + "test/" + str(i + 1) + ".png", "PNG")
+
+        try:
+            os.mkdir(result_Directory + folderName + fileNameRaw)
+        except FileExistsError:
+            pass
+
+        page.save(result_Directory + folderName + fileNameRaw + '/' + str(i + 1) + ".png", "PNG")
     
     input_Text_File.close()
 
+def makeBook(folderName):
+    if(folderName[-1] != '/'):
+        folderName = folderName + '/'
+    file_List = os.listdir(text_Directory + folderName)
+
+    try:
+        os.mkdir(result_Directory + folderName)
+    except FileExistsError:
+        pass
+
+    
+    for i, name in enumerate(file_List):
+        global verbos_line
+        verbos_line = "\r" + folderName[:-1] + " " + str(i + 1) + "/" + str(len(file_List)) + " Total Chapters. "
+        makePages(name, folderName)
+    print()
 
 if __name__ == "__main__":
-    makePages()
+    makeBook(input())
