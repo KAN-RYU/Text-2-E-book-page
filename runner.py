@@ -1,4 +1,5 @@
 import Text2Ebook
+import os
 
 VERBOS = True
 

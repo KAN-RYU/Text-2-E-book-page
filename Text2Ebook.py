@@ -36,7 +36,7 @@ def makePages(fileName, folderName):
     fileNameRaw = fileName[:-5]
 
     while(end < len(input_Text)):
-        sys.stdout.write(verbos_line + str(current_Page) + " Pages.")
+        sys.stdout.write(verbos_line + fileNameRaw + " " + str(current_Page) + " Pages.")
         sys.stdout.flush()
         while(True):
             w, h = page_draw.textsize(input_Text[start:end], font = font_Object, spacing = line_Space)
