@@ -1,8 +1,7 @@
-chromedriver.exe
 debug.log
-*.ipynb
 
 /.ipynb_checkpoints
 /.vscode
 /__pycache__
 /Result/*
+/Processing/*
