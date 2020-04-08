@@ -17,7 +17,6 @@ margin = 40
 width_Limit = image_Size[0] - margin * 2
 height_Limit = image_Size[1] - margin * 2
 line_Space = font_Size // 2 #Change
-min_Line_Character = 17
 
 def insertString(origin, that, index):
     return origin[:index] + that + origin[index:]
@@ -32,18 +31,17 @@ def makePages():
     page = Image.new("RGB", image_Size)
     page_draw = ImageDraw.Draw(page)
 
-    while(start < len(input_Text)):
-        sys.stdout.write("\r" + str(current_Page) + " Pages.")
-        sys.stdout.flush()
+    while(end < len(input_Text)):
         while(True):
+            sys.stdout.write("\r" + str(current_Page) + " Pages.")
+            sys.stdout.flush()
             w, h = page_draw.textsize(input_Text[start:end], font = font_Object, spacing = line_Space)
-
             if h > height_Limit or end > len(input_Text):
                 #PageEnd
-                end -= 2
+                end -= 1
                 page_Queue.append((start, end))
                 start = end + 1
-                end = start + 1
+                end = start + 2
                 if not end > len(input_Text):
                     while(input_Text[start] == '\n'):
                         start += 1
@@ -51,7 +49,6 @@ def makePages():
                 break
             if w > width_Limit:
                 input_Text = insertString(input_Text, "\n", end - 1)
-                end += min_Line_Character
             else:
                 end += 1
         current_Page += 1
@@ -69,6 +66,8 @@ def makePages():
                             fill = font_Color, 
                             align = "left")
         page.save(result_Directory + "test/" + str(i + 1) + ".png", "PNG")
+    
+    input_Text_File.close()
 
 
 if __name__ == "__main__":
