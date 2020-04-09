@@ -91,7 +91,7 @@ def makePages(fileName, folderName):
             verbos_M = verbos_line + fileNameRaw + " " + str(i+1) + "/" + str(current_Page) + " Pages. "
             sys.stdout.write(verbos_M)
             sys.stdout.flush()
-            verbos_Length = len(verbos_M.encode())
+            verbos_Length = min(170, len(verbos_M.encode()))
             page_draw.rectangle([(0,0), image_Size], fill = page_Color)
             page_draw.text((margin, margin), 
                                 text = input_Text[pair[0]:pair[1]], 
@@ -106,7 +106,7 @@ def makePages(fileName, folderName):
         verbos_M = verbos_line + fileNameRaw + " Skip. "
         sys.stdout.write(verbos_M)
         sys.stdout.flush()
-        verbos_Length = len(verbos_M.encode())
+        verbos_Length = min(170, len(verbos_M.encode()))
 
     input_Text_File.close()
 
@@ -126,6 +126,6 @@ def makeBook(folderName):
         verbos_line = "\r" + folderName[:-1] + " " + str(i + 1) + "/" + str(len(file_List)) + " Total Chapters. "
         makePages(name, folderName)
     print()
-
+ 
 if __name__ == "__main__":
     makeBook(input())
