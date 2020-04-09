@@ -52,8 +52,7 @@ def makePages(fileName, folderName):
     sys.stdout.write(verbos_M)
     sys.stdout.flush()
 
-    try:
-        os.mkdir(result_Directory + folderName + fileNameRaw)
+    if not os.path.exists(result_Directory + folderName + fileNameRaw):
         while(end < len(input_Text)):
             w, h = font_Object.getsize_multiline(input_Text[start:end], spacing = line_Space)
             if w > width_Limit:
@@ -76,10 +75,16 @@ def makePages(fileName, folderName):
                     page_Queue.append((start, end))
                     start = end + 1
                     end = start
-                    cnt = 1 if input_Text[start] == '\n' else 0
+                    if(start < len(input_Text)):
+                        cnt = 1 if input_Text[start] == '\n' else 0
                     current_Page += 1
             end += 1
         page_Queue.append((start, end))
+
+        try:
+            os.mkdir(result_Directory + folderName + fileNameRaw)
+        except FileExistsError:
+            pass
 
         for i, pair in enumerate(page_Queue):
             sys.stdout.write("\r" + " " * verbos_Length)
@@ -96,7 +101,7 @@ def makePages(fileName, folderName):
                                 align = "left")
 
             page.save(result_Directory + folderName + fileNameRaw + '/' + str(i + 1) + ".png", "PNG")
-    except FileExistsError:
+    else:
         sys.stdout.write("\r" + " " * verbos_Length)
         verbos_M = verbos_line + fileNameRaw + " Skip. "
         sys.stdout.write(verbos_M)
