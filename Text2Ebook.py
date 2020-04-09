@@ -6,6 +6,7 @@ import os
 font_Name = "KoPubWorld Dotum_Pro Medium.otf"
 font_Size = 36
 font_Object = ImageFont.truetype(font = font_Name, size = font_Size)
+font_Offset = font_Size // 12
 
 font_Color = "black"
 page_Color = "white"
@@ -18,6 +19,8 @@ margin = 40
 width_Limit = image_Size[0] - margin * 2
 height_Limit = image_Size[1] - margin * 2
 line_Space = font_Size // 2 #Change
+max_Line = (image_Size[1] - margin * 2 + line_Space) // (font_Size + line_Space + font_Offset)
+min_Character = 22
 
 verbos_line = ""
 verbos_Length = 0
@@ -35,39 +38,49 @@ def makePages(fileName, folderName):
     page = Image.new("RGB", image_Size)
     page_draw = ImageDraw.Draw(page)
     global verbos_Length
+    spin_Bar = '-\\|/'
+    spin_Index = 0
     fileNameRaw = fileName[:-4]
     while fileNameRaw.endswith(' '):
         fileNameRaw = fileNameRaw[:-1]
     fileNameRaw = fileNameRaw.replace(".", "．")
 
+    nLFlag = False
+
     try:
         os.mkdir(result_Directory + folderName + fileNameRaw)
         while(end < len(input_Text)):
+            w, h = font_Object.getsize_multiline(input_Text[start:end], spacing = line_Space)
+            if w > width_Limit:
+                sys.stdout.write("\b" + spin_Bar[spin_Index])
+                sys.stdout.flush()
+                spin_Index = (spin_Index + 1) % 4
+                input_Text = insertString(input_Text, "\n", end - 1)
+                start = end
+                end += min_Character
+            else:
+                end += 1
+
+        start = 0
+        end = 1
+        cnt = 0
+        while(end < len(input_Text)):
             sys.stdout.write("\r" + " " * verbos_Length)
-            verbos_M = verbos_line + fileNameRaw + " " + str(current_Page) + " Pages."
+            verbos_M = verbos_line + fileNameRaw + " " + str(current_Page) + " Pages. "
             sys.stdout.write(verbos_M)
             sys.stdout.flush()
             verbos_Length = len(verbos_M.encode())
-            while(True):
-                w, h = font_Object.getsize_multiline(input_Text[start:end], spacing = line_Space)
-                if h > height_Limit or end > len(input_Text):
-                    #PageEnd
-                    end -= 1
+            if input_Text[end] == '\n':
+                cnt += 1
+                if(cnt == max_Line):
                     page_Queue.append((start, end))
                     start = end + 1
-                    end = start + 2
-                    if not end > len(input_Text):
-                        while(input_Text[start] == '\n' and end < len(input_Text)):
-                            start += 1
-                            end += 1
-                    break
-                if w > width_Limit:
-                    input_Text = insertString(input_Text, "\n", end - 1)
-                else:
-                    end += 1
-            current_Page += 1
-            
-        current_Page = 1
+                    end = start
+                    cnt = 1 if input_Text[start] == '\n' else 0
+                    current_Page += 1
+            end += 1
+        page_Queue.append((start, end))
+
         for i, pair in enumerate(page_Queue):
             page_draw.rectangle([(0,0), image_Size], fill = page_Color)
             page_draw.text((margin, margin), 
