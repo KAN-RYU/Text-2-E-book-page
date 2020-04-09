@@ -49,7 +49,7 @@ def makePages(fileName, folderName):
             sys.stdout.flush()
             verbos_Length = len(verbos_M.encode())
             while(True):
-                w, h = page_draw.textsize(input_Text[start:end], font = font_Object, spacing = line_Space)
+                w, h = font_Object.getsize_multiline(input_Text[start:end], spacing = line_Space)
                 if h > height_Limit or end > len(input_Text):
                     #PageEnd
                     end -= 1
