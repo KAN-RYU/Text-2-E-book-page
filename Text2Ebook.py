@@ -47,6 +47,11 @@ def makePages(fileName, folderName):
 
     nLFlag = False
 
+    sys.stdout.write("\r" + " " * verbos_Length)
+    verbos_M = verbos_line + fileNameRaw + " "
+    sys.stdout.write(verbos_M)
+    sys.stdout.flush()
+
     try:
         os.mkdir(result_Directory + folderName + fileNameRaw)
         while(end < len(input_Text)):
@@ -65,11 +70,6 @@ def makePages(fileName, folderName):
         end = 1
         cnt = 0
         while(end < len(input_Text)):
-            sys.stdout.write("\r" + " " * verbos_Length)
-            verbos_M = verbos_line + fileNameRaw + " " + str(current_Page) + " Pages. "
-            sys.stdout.write(verbos_M)
-            sys.stdout.flush()
-            verbos_Length = len(verbos_M.encode())
             if input_Text[end] == '\n':
                 cnt += 1
                 if(cnt == max_Line):
@@ -82,6 +82,11 @@ def makePages(fileName, folderName):
         page_Queue.append((start, end))
 
         for i, pair in enumerate(page_Queue):
+            sys.stdout.write("\r" + " " * verbos_Length)
+            verbos_M = verbos_line + fileNameRaw + " " + str(i+1) + "/" + str(current_Page) + " Pages. "
+            sys.stdout.write(verbos_M)
+            sys.stdout.flush()
+            verbos_Length = len(verbos_M.encode())
             page_draw.rectangle([(0,0), image_Size], fill = page_Color)
             page_draw.text((margin, margin), 
                                 text = input_Text[pair[0]:pair[1]], 
@@ -93,7 +98,7 @@ def makePages(fileName, folderName):
             page.save(result_Directory + folderName + fileNameRaw + '/' + str(i + 1) + ".png", "PNG")
     except FileExistsError:
         sys.stdout.write("\r" + " " * verbos_Length)
-        verbos_M = verbos_line + fileNameRaw + " Skip."
+        verbos_M = verbos_line + fileNameRaw + " Skip. "
         sys.stdout.write(verbos_M)
         sys.stdout.flush()
         verbos_Length = len(verbos_M.encode())
