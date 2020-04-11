@@ -1,6 +1,7 @@
 from PIL import ImageFont, Image, ImageDraw
 import sys
 import os
+import re
 
 #Global Variable
 font_Name = "KoPubWorld Dotum_Pro Medium.otf"
@@ -24,6 +25,11 @@ min_Character = 22
 
 verbos_line = ""
 verbos_Length = 0
+
+def sorted_alphanumeric(data):
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
+    return sorted(data, key=alphanum_key)
 
 def insertString(origin, that, index):
     return origin[:index] + that + origin[index:]
@@ -114,6 +120,7 @@ def makeBook(folderName):
     if(folderName[-1] != '/'):
         folderName = folderName + '/'
     file_List = os.listdir(text_Directory + folderName)
+    file_List = sorted_alphanumeric(file_List)
 
     try:
         os.mkdir(result_Directory + folderName)
