@@ -6,4 +6,4 @@ Make E-book pages from text file
 python runner.py
 ```
 
-need pillow, python 3.7
+need pillow, python 3.7, po
