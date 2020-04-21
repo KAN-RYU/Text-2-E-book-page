@@ -2,3 +2,8 @@
 Make E-book pages from text file
 
 ## How To Use
+```
+python runner.py
+```
+
+need pillow, python 3.7, po
