@@ -5,3 +5,5 @@ debug.log
 /__pycache__
 /Result/*
 /Processing/*
+
+*.psd
