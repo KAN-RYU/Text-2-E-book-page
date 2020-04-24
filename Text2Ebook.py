@@ -2,6 +2,7 @@ from PIL import ImageFont, Image, ImageDraw
 import sys
 import os
 import re
+import ConfigParser
 
 #Global Variable
 font_Name = "KoPubWorld Dotum_Pro Medium.otf"
