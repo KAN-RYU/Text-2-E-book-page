@@ -29,7 +29,7 @@ class Text2Ebook():
         self.verbos_line = ""
         self.verbos_Length = 0
 
-    def makePages(self, fileName, folderName):
+    def makePages(self, fileName, folderName, skipProcessed = True):
         input_Text_File = open(self.text_Directory +  folderName + fileName, "r", encoding = 'utf-8')
         input_Text = input_Text_File.read()
         start = 0
@@ -52,7 +52,7 @@ class Text2Ebook():
         sys.stdout.write(verbos_M)
         sys.stdout.flush()
 
-        if not os.path.exists(self.result_Directory + folderName + fileNameRaw):
+        if not os.path.exists(self.result_Directory + folderName + fileNameRaw) or not skipProcessed:
             while(end < len(input_Text)):
                 w, h = self.font_Object.getsize_multiline(input_Text[start:end], spacing = self.line_Space)
                 if w > self.width_Limit:
@@ -110,7 +110,7 @@ class Text2Ebook():
 
         input_Text_File.close()
 
-    def makeBook(self, folderName):
+    def makeBook(self, folderName, skipProcessed = True):
         if(folderName[-1] != '/'):
             folderName = folderName + '/'
         file_List = os.listdir(self.text_Directory + folderName)
@@ -124,5 +124,5 @@ class Text2Ebook():
         
         for i, name in enumerate(file_List):
             self.verbos_line = "\r" + folderName[:-1] + " " + str(i + 1) + "/" + str(len(file_List)) + " Total Chapters. "
-            self.makePages(name, folderName)
+            self.makePages(name, folderName, skipProcessed)
         print()

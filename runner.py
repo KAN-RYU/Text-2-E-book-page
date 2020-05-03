@@ -10,11 +10,11 @@ VERSION = 'ver 0.3'
 
 maker = Text2Ebook(__config)
 
-def makeBooks():
+def makeBooks(skipProcessed = True):
     folder_List = os.listdir(__config.text_Directory)
     print("Start processing total " + str(len(folder_List)) + " Books.")
     for name in folder_List:
-        maker.makeBook(name)
+        maker.makeBook(name, skipProcessed)
     print("Done!")
 
 def menu():
@@ -35,9 +35,9 @@ if __name__ == "__main__":
         menu()
         choice = input('Type: ')
         if choice == '1':
-            makeBooks()
+            makeBooks(True)
         elif choice == '2':
-            pass
+            makeBooks(False)
         elif choice == '3':
             pass
         elif choice == 'r':
