@@ -1,8 +1,8 @@
 from PIL import ImageFont, Image, ImageDraw
+from Text2EbookHelper import sorted_alphanumeric, insertString
 import sys
 import os
-import re
-import ConfigParser
+import parmap
 
 #Global Variable
 font_Name = "KoPubWorld Dotum_Pro Medium.otf"
@@ -26,14 +26,6 @@ min_Character = 22
 
 verbos_line = ""
 verbos_Length = 0
-
-def sorted_alphanumeric(data):
-    convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
-    return sorted(data, key=alphanum_key)
-
-def insertString(origin, that, index):
-    return origin[:index] + that + origin[index:]
 
 def makePages(fileName, folderName):
     input_Text_File = open(text_Directory +  folderName + fileName, "r", encoding = 'utf-8')
@@ -134,6 +126,3 @@ def makeBook(folderName):
         verbos_line = "\r" + folderName[:-1] + " " + str(i + 1) + "/" + str(len(file_List)) + " Total Chapters. "
         makePages(name, folderName)
     print()
- 
-if __name__ == "__main__":
-    makeBook(input())
