@@ -1,4 +1,4 @@
-import Text2Ebook
+from Text2Ebook import Text2Ebook
 from Text2EbookConfig import Text2EbookConfig
 import os
 import sys
@@ -8,11 +8,13 @@ __config = Text2EbookConfig()
 VERBOS = __config.verbos
 VERSION = 'ver 0.3'
 
+maker = Text2Ebook(__config)
+
 def makeBooks():
-    folder_List = os.listdir(Text2Ebook.text_Directory)
+    folder_List = os.listdir(__config.text_Directory)
     print("Start processing total " + str(len(folder_List)) + " Books.")
     for name in folder_List:
-        Text2Ebook.makeBook(name)
+        maker.makeBook(name)
     print("Done!")
 
 def menu():
@@ -33,7 +35,7 @@ if __name__ == "__main__":
         menu()
         choice = input('Type: ')
         if choice == '1':
-            pass
+            makeBooks()
         elif choice == '2':
             pass
         elif choice == '3':
