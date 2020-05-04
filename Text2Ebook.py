@@ -3,7 +3,6 @@ from Text2EbookHelper import sorted_alphanumeric, insertString
 import configparser
 import sys
 import os
-import parmap
 import multiprocessing
 from tqdm import tqdm
 from itertools import repeat
@@ -50,17 +49,9 @@ class Text2Ebook():
 
         nLFlag = False
 
-        # sys.stdout.write("\r" + " " * self.verbos_Length)
-        # verbos_M = self.verbos_line + fileNameRaw + " "
-        # sys.stdout.write(verbos_M)
-        # sys.stdout.flush()
-
         while(end < len(input_Text)):
             w, h = font_Object.getsize_multiline(input_Text[start:end], spacing = self.line_Space)
             if w > self.width_Limit:
-                # sys.stdout.write("\b" + spin_Bar[spin_Index])
-                # sys.stdout.flush()
-                # spin_Index = (spin_Index + 1) % 4
                 input_Text = insertString(input_Text, "\n", end - 1)
                 start = end
                 end += self.min_Character
@@ -89,11 +80,6 @@ class Text2Ebook():
             pass
 
         for i, pair in enumerate(page_Queue):
-            # sys.stdout.write("\r" + " " * self.verbos_Length)
-            # verbos_M = self.verbos_line + fileNameRaw + " " + str(i+1) + "/" + str(current_Page) + " Pages. "
-            # sys.stdout.write(verbos_M)
-            # sys.stdout.flush()
-            # self.verbos_Length = min(170, len(verbos_M.encode()))
             page_draw.rectangle([(0,0), self.image_Size], fill = self.page_Color)
             page_draw.text((self.margin, self.margin), 
                                 text = input_Text[pair[0]:pair[1]], 
@@ -141,9 +127,4 @@ class Text2Ebook():
                 pool.apply_async(self.makePages, args=(file_List[i], folderName), callback=update)
             pool.close()
             pool.join()
-        # parmap.map(self.makePages, file_List, folderName, pm_pbar=True, pm_processes=num_cores)
-        
-        # for i, name in enumerate(file_List):
-        #     # self.verbos_line = "\r" + folderName[:-1] + " " + str(i + 1) + "/" + str(len(file_List)) + " Total Chapters. "
-        #     self.makePages(name, folderName)
         print()
