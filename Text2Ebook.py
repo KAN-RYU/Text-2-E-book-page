@@ -116,6 +116,9 @@ class Text2Ebook():
                     file_List_tmp.append(name)
             file_List = file_List_tmp
         
+        if len(file_List) == 0:
+            print(folderName[:-1], 'skip.')
+            return
         print(folderName[:-1], str(len(file_List)), 'chapters.')
         num_cores = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(num_cores)
@@ -128,3 +131,4 @@ class Text2Ebook():
             pool.close()
             pool.join()
         print()
+        return
