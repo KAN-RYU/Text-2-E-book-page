@@ -26,7 +26,7 @@ if __name__ == "__main__":
     __config = Text2EbookConfig()
 
     VERBOS = __config.verbos
-    VERSION = 'ver 0.3'
+    VERSION = 'ver 0.4'
 
     maker = Text2Ebook(__config)
     
