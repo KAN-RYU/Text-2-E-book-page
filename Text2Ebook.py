@@ -5,6 +5,8 @@ import sys
 import os
 import parmap
 import multiprocessing
+from tqdm import tqdm
+from itertools import repeat
 
 class Text2Ebook():
     def __init__(self, __config):
@@ -130,7 +132,16 @@ class Text2Ebook():
         
         print(folderName[:-1], str(len(file_List)), 'chapters.')
         num_cores = multiprocessing.cpu_count()
-        parmap.map(self.makePages, file_List, folderName, pm_pbar=True, pm_processes=num_cores)
+        pool = multiprocessing.Pool(num_cores)
+        total = len(file_List)
+        with tqdm(total = total) as pbar:
+            def update(*a):
+                pbar.update()
+            for i in range(total):
+                pool.apply_async(self.makePages, args=(file_List[i], folderName), callback=update)
+            pool.close()
+            pool.join()
+        # parmap.map(self.makePages, file_List, folderName, pm_pbar=True, pm_processes=num_cores)
         
         # for i, name in enumerate(file_List):
         #     # self.verbos_line = "\r" + folderName[:-1] + " " + str(i + 1) + "/" + str(len(file_List)) + " Total Chapters. "
