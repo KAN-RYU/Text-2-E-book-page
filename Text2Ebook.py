@@ -120,6 +120,8 @@ class Text2Ebook():
             print(folderName[:-1], 'skip.')
             return
         print(folderName[:-1], str(len(file_List)), 'chapters.')
+        
+        #Multi
         num_cores = multiprocessing.cpu_count()
         pool = multiprocessing.Pool(num_cores)
         total = len(file_List)
