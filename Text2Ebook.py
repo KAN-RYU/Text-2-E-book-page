@@ -122,7 +122,7 @@ class Text2Ebook():
         print(folderName[:-1], str(len(file_List)), 'chapters.')
         
         #Multi
-        num_cores = multiprocessing.cpu_count()
+        num_cores = multiprocessing.cpu_count() // 2
         pool = multiprocessing.Pool(num_cores)
         total = len(file_List)
         with tqdm(total = total) as pbar:
