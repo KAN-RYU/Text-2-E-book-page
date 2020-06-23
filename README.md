@@ -9,3 +9,5 @@ python runner.py
 ```
 
 need pillow, python 3.7+
+
+config.ini
