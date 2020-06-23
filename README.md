@@ -9,6 +9,11 @@ need pillow, tqdm, python 3.7+
 
 ## How To Use
 ```
+place your text files in
+%text_directory%/"book name"/ch1.txt
+                             ch2.txt
+                             ...
+then, 
 python runner.py
 ```
 
