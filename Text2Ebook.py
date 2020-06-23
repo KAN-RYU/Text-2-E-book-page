@@ -26,6 +26,8 @@ class Text2Ebook():
         self.line_Space = self.font_Size // 2 #Change
         self.max_Line = (self.image_Size[1] - self.margin * 2 + self.line_Space) // (self.font_Size + self.line_Space + self.font_Offset)
         self.min_Character = __config.min_Character
+        
+        self.num_core = __config.num_core
 
         self.verbos_line = ""
         self.verbos_Length = 0
@@ -122,7 +124,7 @@ class Text2Ebook():
         print(folderName[:-1], str(len(file_List)), 'chapters.')
         
         #Multi
-        num_cores = multiprocessing.cpu_count() // 2
+        num_cores = min(multiprocessing.cpu_count(), self.num_core)
         pool = multiprocessing.Pool(num_cores)
         total = len(file_List)
         with tqdm(total = total) as pbar:

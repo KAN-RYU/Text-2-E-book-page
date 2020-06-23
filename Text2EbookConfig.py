@@ -24,6 +24,7 @@ class Text2EbookConfig():
     result_Directory = './Result/'
     
     #Debug
+    num_core = 2
     verbos = False
     
     def __init__(self):
@@ -51,6 +52,8 @@ class Text2EbookConfig():
                 
                 self.text_Directory = config.get('Directory', 'text_Directory')
                 self.result_Directory = config.get('Directory', 'result_Directory')
+                
+                self.num_core = config.getint('Debug', 'num_core')
                 
                 try:
                     self.verbos = config.getboolean('Debug', 'verbos')
@@ -87,6 +90,7 @@ class Text2EbookConfig():
         config.set('Directory', 'result_Directory', self.result_Directory)
         
         config.add_section('Debug')
+        config.set('Debug', 'num_core', self.num_core)
         config.set('Debug', 'verbos', self.verbos)
         
         try:
@@ -115,4 +119,5 @@ class Text2EbookConfig():
         print('-text_directory =', self.text_Directory)
         print('-result_driectory =', self.result_Directory)
         print('[Debug]')
+        print('-num_core =', self.num_core)
         print('-verbos =', self.verbos)
